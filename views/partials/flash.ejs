@@ -1,0 +1,6 @@
+<% if (flash) { %>
+<div class="alert alert-<%= flash.type %> alert-auto-dismiss" role="alert">
+  <i class="fas fa-<%= flash.type === 'success' ? 'check-circle' : flash.type === 'danger' ? 'exclamation-triangle' : flash.type === 'warning' ? 'exclamation-circle' : 'info-circle' %>"></i>
+  <%= flash.message %>
+</div>
+<% } %>

@@ -1,0 +1,67 @@
+<% locals.activePage = 'bookings' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div><h1>Booking Management</h1><p>Review and manage all booking requests</p></div>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <% if (bookings.length === 0) { %>
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-calendar-times"></i></div>
+            <h6>No booking requests yet</h6>
+          </div>
+          <% } else { %>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Resident</th><th>Room</th><th>Check-In</th><th>Check-Out</th><th>Status</th><th>Note</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <% bookings.forEach((b, i) => { %>
+              <tr>
+                <td class="text-muted"><%= i+1 %></td>
+                <td>
+                  <div class="fw-semibold"><%= b.resident ? b.resident.name : 'Deleted User' %></div>
+                  <div class="text-muted"><%= b.resident ? b.resident.email : '' %></div>
+                </td>
+                <td>
+                  <div class="fw-semibold"><%= b.room ? b.room.roomNumber : 'N/A' %></div>
+                  <div class="text-muted"><%= b.room ? b.room.type : '' %></div>
+                </td>
+                <td><%= new Date(b.checkIn).toLocaleDateString('en-IN') %></td>
+                <td><%= new Date(b.checkOut).toLocaleDateString('en-IN') %></td>
+                <td><span class="badge badge-<%= b.status.toLowerCase() %>"><%= b.status %></span></td>
+                <td><span class="text-muted"><%= b.note ? b.note.substring(0,30) + (b.note.length>30?'…':'') : '—' %></span></td>
+                <td>
+                  <% if (b.status === 'Pending') { %>
+                  <div style="display:flex;flex-direction:column;gap:6px;min-width:200px;">
+                    <form action="/admin/bookings/<%= b._id %>/status" method="POST" style="display:flex;gap:6px;">
+                      <input type="hidden" name="status" value="Approved" />
+                      <input type="text" name="adminNote" class="form-control" style="font-size:0.75rem;padding:5px 8px;" placeholder="Optional note" />
+                      <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-check"></i></button>
+                    </form>
+                    <form action="/admin/bookings/<%= b._id %>/status" method="POST">
+                      <input type="hidden" name="status" value="Rejected" />
+                      <button type="submit" class="btn btn-sm btn-danger" style="width:100%;"><i class="fas fa-times"></i> Reject</button>
+                    </form>
+                  </div>
+                  <% } else { %>
+                  <span class="text-muted" style="font-size:0.8rem;"><%= b.adminNote || '—' %></span>
+                  <% } %>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

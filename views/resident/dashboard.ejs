@@ -1,0 +1,98 @@
+<% locals.activePage = 'dashboard' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div>
+          <h1>Welcome, <%= user.name %>!</h1>
+          <p>Here's a summary of your hotel status</p>
+        </div>
+      </div>
+
+      <% if (approvedBooking) { %>
+      <div class="card" style="margin-bottom:20px;border-left:4px solid var(--success);">
+        <div class="card-body" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div style="width:52px;height:52px;background:rgba(39,174,96,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--success);flex-shrink:0;">
+            <i class="fas fa-home"></i>
+          </div>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:var(--primary);font-size:1rem;">Your Room: <%= approvedBooking.room.roomNumber %></div>
+            <div class="text-muted"><%= approvedBooking.room.type %> &bull; Floor <%= approvedBooking.room.floor %> &bull; ₹<%= approvedBooking.room.price.toLocaleString('en-IN') %>/mo</div>
+            <div class="text-muted" style="margin-top:2px;">
+              Check-in: <strong><%= new Date(approvedBooking.checkIn).toLocaleDateString('en-IN') %></strong> &rarr;
+              Check-out: <strong><%= new Date(approvedBooking.checkOut).toLocaleDateString('en-IN') %></strong>
+            </div>
+          </div>
+          <span class="badge badge-approved" style="font-size:0.8rem;">Approved</span>
+        </div>
+      </div>
+      <% } %>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap;">
+        <div class="card" style="min-width:0;">
+          <div class="card-header">
+            <h5><i class="fas fa-calendar-check" style="color:var(--accent);margin-right:8px;"></i>My Bookings</h5>
+            <a href="/resident/bookings" class="btn btn-sm btn-outline-primary">View All</a>
+          </div>
+          <div class="table-wrapper">
+            <% if (myBookings.length === 0) { %>
+            <div class="empty-state">
+              <div class="empty-icon"><i class="fas fa-calendar-plus"></i></div>
+              <h6>No bookings yet</h6>
+              <a href="/resident/rooms" class="btn btn-sm btn-primary" style="margin-top:8px;"><i class="fas fa-search"></i> Browse Rooms</a>
+            </div>
+            <% } else { %>
+            <table>
+              <thead><tr><th>Room</th><th>Check-In</th><th>Status</th></tr></thead>
+              <tbody>
+                <% myBookings.forEach(b => { %>
+                <tr>
+                  <td class="fw-semibold"><%= b.room ? b.room.roomNumber : 'N/A' %></td>
+                  <td class="text-muted"><%= new Date(b.checkIn).toLocaleDateString('en-IN') %></td>
+                  <td><span class="badge badge-<%= b.status.toLowerCase() %>"><%= b.status %></span></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="card" style="min-width:0;">
+          <div class="card-header">
+            <h5><i class="fas fa-exclamation-circle" style="color:var(--danger);margin-right:8px;"></i>My Complaints</h5>
+            <a href="/resident/complaints" class="btn btn-sm btn-outline-primary">View All</a>
+          </div>
+          <div class="table-wrapper">
+            <% if (myComplaints.length === 0) { %>
+            <div class="empty-state">
+              <div class="empty-icon"><i class="fas fa-smile"></i></div>
+              <h6>No complaints filed</h6>
+              <a href="/resident/complaints/new" class="btn btn-sm btn-primary" style="margin-top:8px;"><i class="fas fa-plus"></i> File Complaint</a>
+            </div>
+            <% } else { %>
+            <table>
+              <thead><tr><th>Title</th><th>Category</th><th>Status</th></tr></thead>
+              <tbody>
+                <% myComplaints.forEach(c => { %>
+                <tr>
+                  <td class="complaint-title"><%= c.title.length > 20 ? c.title.substring(0,20)+'…' : c.title %></td>
+                  <td class="text-muted"><%= c.category %></td>
+                  <td><span class="badge badge-<%= c.status.toLowerCase().replace(' ','-') %>"><%= c.status %></span></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

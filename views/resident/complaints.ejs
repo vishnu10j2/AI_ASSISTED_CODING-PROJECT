@@ -1,0 +1,54 @@
+<% locals.activePage = 'complaints' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div><h1>My Complaints</h1><p>Track and manage your filed complaints</p></div>
+        <a href="/resident/complaints/new" class="btn btn-primary"><i class="fas fa-plus"></i> New Complaint</a>
+      </div>
+
+      <% if (complaints.length === 0) { %>
+      <div class="card">
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fas fa-smile-beam"></i></div>
+          <h6>No complaints filed</h6>
+          <p>If you have an issue, let us know by filing a complaint.</p>
+          <a href="/resident/complaints/new" class="btn btn-primary" style="margin-top:8px;"><i class="fas fa-plus"></i> File a Complaint</a>
+        </div>
+      </div>
+      <% } else { %>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <% complaints.forEach(c => { %>
+        <div class="card">
+          <div class="card-body" style="padding:18px 20px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+                  <span class="complaint-title" style="font-size:.975rem;"><%= c.title %></span>
+                  <span class="badge" style="background:var(--body-bg);color:#4a5568;"><%= c.category %></span>
+                  <span class="badge badge-<%= c.status.toLowerCase().replace(' ','-') %>"><%= c.status %></span>
+                </div>
+                <p style="font-size:.85rem;color:#718096;margin:0 0 8px;"><%= c.description %></p>
+                <span class="complaint-meta"><i class="fas fa-clock" style="margin-right:4px;"></i>Filed: <%= new Date(c.createdAt).toLocaleDateString('en-IN', {year:'numeric',month:'short',day:'numeric'}) %></span>
+              </div>
+            </div>
+            <% if (c.adminResponse) { %>
+            <div style="margin-top:12px;padding:10px 14px;background:#f0f4f8;border-radius:8px;border-left:3px solid var(--primary-light);">
+              <div style="font-size:.75rem;font-weight:700;color:var(--primary-light);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;"><i class="fas fa-user-shield"></i> Admin Response</div>
+              <div style="font-size:.85rem;color:#4a5568;"><%= c.adminResponse %></div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

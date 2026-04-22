@@ -1,0 +1,62 @@
+<% locals.activePage = 'rooms' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div><h1>Room Management</h1><p>Add, edit, and manage all hotel rooms</p></div>
+        <a href="/admin/rooms/add" class="btn btn-primary"><i class="fas fa-plus"></i> Add Room</a>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <% if (rooms.length === 0) { %>
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-door-open"></i></div>
+            <h6>No rooms added yet</h6>
+            <p>Click "Add Room" to get started.</p>
+          </div>
+          <% } else { %>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Room No.</th><th>Type</th><th>Floor</th><th>Capacity</th><th>Price/mo</th><th>Amenities</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <% rooms.forEach((room, i) => { %>
+              <tr>
+                <td class="text-muted"><%= i+1 %></td>
+                <td class="fw-semibold"><%= room.roomNumber %></td>
+                <td><%= room.type %></td>
+                <td><%= room.floor %></td>
+                <td><%= room.capacity %></td>
+                <td>₹<%= room.price.toLocaleString('en-IN') %></td>
+                <td>
+                  <% if (room.amenities.length > 0) { %>
+                    <div class="room-amenities" style="gap:3px;">
+                      <% room.amenities.slice(0,2).forEach(a => { %><span class="amenity-tag"><%= a %></span><% }) %>
+                      <% if (room.amenities.length > 2) { %><span class="amenity-tag">+<%= room.amenities.length-2 %></span><% } %>
+                    </div>
+                  <% } else { %><span class="text-muted">—</span><% } %>
+                </td>
+                <td><span class="badge badge-<%= room.status.toLowerCase() %>"><%= room.status %></span></td>
+                <td>
+                  <div class="action-btns">
+                    <a href="/admin/rooms/<%= room._id %>/edit" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                    <form action="/admin/rooms/<%= room._id %>/delete" method="POST" style="display:inline;">
+                      <button type="submit" class="btn btn-sm btn-danger" data-confirm="Delete room <%= room.roomNumber %>?"><i class="fas fa-trash"></i></button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

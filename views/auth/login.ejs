@@ -1,0 +1,29 @@
+<%- include('../partials/head') %>
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon"><i class="fas fa-building"></i></div>
+      <h2>HotelMS</h2>
+      <p>Sign in to your account</p>
+    </div>
+    <%- include('../partials/flash') %>
+    <form action="/auth/login" method="POST">
+      <div style="margin-bottom:16px;">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-control" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div style="margin-bottom:20px;">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;">
+        <i class="fas fa-sign-in-alt"></i> Sign In
+      </button>
+    </form>
+    <hr class="section-divider" />
+    <p style="text-align:center;font-size:0.875rem;color:#718096;margin:0;">
+      Don't have an account? <a href="/auth/signup" style="color:var(--primary-light);font-weight:600;">Sign Up</a>
+    </p>
+  </div>
+</div>
+<%- include('../partials/footer') %>

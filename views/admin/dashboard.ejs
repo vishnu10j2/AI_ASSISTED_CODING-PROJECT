@@ -1,0 +1,122 @@
+<% locals.activePage = 'dashboard' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p>Overview of all hotel operations</p>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card blue">
+          <div class="stat-icon"><i class="fas fa-door-open"></i></div>
+          <div class="stat-info">
+            <div class="stat-value"><%= totalRooms %></div>
+            <div class="stat-label">Total Rooms</div>
+          </div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-info">
+            <div class="stat-value"><%= totalUsers %></div>
+            <div class="stat-label">Residents</div>
+          </div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+          <div class="stat-info">
+            <div class="stat-value"><%= totalBookings %></div>
+            <div class="stat-label">Total Bookings</div>
+          </div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon"><i class="fas fa-exclamation-circle"></i></div>
+          <div class="stat-info">
+            <div class="stat-value"><%= totalComplaints %></div>
+            <div class="stat-label">Complaints</div>
+          </div>
+        </div>
+        <div class="stat-card teal">
+          <div class="stat-icon"><i class="fas fa-clock"></i></div>
+          <div class="stat-info">
+            <div class="stat-value"><%= pendingBookings %></div>
+            <div class="stat-label">Pending Bookings</div>
+          </div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-icon"><i class="fas fa-bell"></i></div>
+          <div class="stat-info">
+            <div class="stat-value"><%= openComplaints %></div>
+            <div class="stat-label">Open Complaints</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap;">
+        <div class="card" style="min-width:0;">
+          <div class="card-header">
+            <h5><i class="fas fa-calendar-check" style="color:var(--accent);margin-right:8px;"></i>Recent Bookings</h5>
+            <a href="/admin/bookings" class="btn btn-sm btn-outline-primary">View All</a>
+          </div>
+          <div class="table-wrapper">
+            <% if (recentBookings.length === 0) { %>
+            <div class="empty-state">
+              <div class="empty-icon"><i class="fas fa-calendar-times"></i></div>
+              <h6>No bookings yet</h6>
+            </div>
+            <% } else { %>
+            <table>
+              <thead><tr><th>Resident</th><th>Room</th><th>Status</th></tr></thead>
+              <tbody>
+                <% recentBookings.forEach(b => { %>
+                <tr>
+                  <td class="fw-semibold"><%= b.resident ? b.resident.name : 'N/A' %></td>
+                  <td><%= b.room ? b.room.roomNumber : 'N/A' %></td>
+                  <td><span class="badge badge-<%= b.status.toLowerCase() %>"><%= b.status %></span></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="card" style="min-width:0;">
+          <div class="card-header">
+            <h5><i class="fas fa-exclamation-circle" style="color:var(--danger);margin-right:8px;"></i>Recent Complaints</h5>
+            <a href="/admin/complaints" class="btn btn-sm btn-outline-primary">View All</a>
+          </div>
+          <div class="table-wrapper">
+            <% if (recentComplaints.length === 0) { %>
+            <div class="empty-state">
+              <div class="empty-icon"><i class="fas fa-check-circle"></i></div>
+              <h6>No complaints</h6>
+            </div>
+            <% } else { %>
+            <table>
+              <thead><tr><th>Title</th><th>By</th><th>Status</th></tr></thead>
+              <tbody>
+                <% recentComplaints.forEach(c => { %>
+                <tr>
+                  <td class="complaint-title"><%= c.title.length > 25 ? c.title.substring(0,25)+'…' : c.title %></td>
+                  <td class="text-muted"><%= c.resident ? c.resident.name : 'N/A' %></td>
+                  <td><span class="badge badge-<%= c.status.toLowerCase().replace(' ','-') %>"><%= c.status %></span></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,56 @@
+<% locals.activePage = 'rooms' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div><h1>Available Rooms</h1><p>Browse and book available rooms</p></div>
+      </div>
+      <% if (rooms.length === 0) { %>
+      <div class="card">
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fas fa-door-closed"></i></div>
+          <h6>No rooms available at this time</h6>
+          <p>Please check back later.</p>
+        </div>
+      </div>
+      <% } else { %>
+      <div class="room-grid">
+        <% rooms.forEach(room => { %>
+        <div class="room-card">
+          <div class="room-card-header">
+            <div>
+              <div class="room-number">Room <%= room.roomNumber %></div>
+              <div class="room-type"><%= room.type %> &bull; Floor <%= room.floor %></div>
+            </div>
+            <div style="text-align:right;">
+              <div class="room-price">₹<%= room.price.toLocaleString('en-IN') %><small>/mo</small></div>
+            </div>
+          </div>
+          <div class="room-card-body">
+            <div class="room-detail"><i class="fas fa-users"></i> Capacity: <%= room.capacity %> person<%= room.capacity > 1 ? 's' : '' %></div>
+            <% if (room.description) { %>
+            <div class="room-detail"><i class="fas fa-info-circle"></i> <%= room.description %></div>
+            <% } %>
+            <% if (room.amenities.length > 0) { %>
+            <div class="room-amenities">
+              <% room.amenities.forEach(a => { %><span class="amenity-tag"><%= a %></span><% }) %>
+            </div>
+            <% } %>
+          </div>
+          <div class="room-card-footer">
+            <a href="/resident/rooms/<%= room._id %>/book" class="btn btn-primary" style="width:100%;justify-content:center;">
+              <i class="fas fa-calendar-plus"></i> Book This Room
+            </a>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

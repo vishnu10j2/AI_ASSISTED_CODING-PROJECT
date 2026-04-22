@@ -1,0 +1,17 @@
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="mobile-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+    <span class="topbar-title"><%= title %></span>
+  </div>
+  <div class="topbar-actions">
+    <% if (user) { %>
+    <a href="/profile" class="topbar-btn">
+      <i class="fas fa-user-circle"></i>
+      <span class="d-none d-md-inline"><%= user.name %></span>
+    </a>
+    <a href="/auth/logout" class="topbar-btn">
+      <i class="fas fa-sign-out-alt"></i>
+    </a>
+    <% } %>
+  </div>
+</div>

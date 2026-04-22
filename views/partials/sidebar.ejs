@@ -1,0 +1,80 @@
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="fas fa-building"></i></div>
+    <div class="brand-text">
+      HotelMS
+      <small>Management System</small>
+    </div>
+  </div>
+
+  <% if (user && user.role === 'admin') { %>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Main</div>
+    <nav class="sidebar-nav">
+      <a href="/dashboard" class="<%= locals.activePage === 'dashboard' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-tachometer-alt"></i></span> Dashboard
+      </a>
+    </nav>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Management</div>
+    <nav class="sidebar-nav">
+      <a href="/admin/rooms" class="<%= locals.activePage === 'rooms' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-door-open"></i></span> Rooms
+      </a>
+      <a href="/admin/bookings" class="<%= locals.activePage === 'bookings' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-calendar-check"></i></span> Bookings
+      </a>
+      <a href="/admin/complaints" class="<%= locals.activePage === 'complaints' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-exclamation-circle"></i></span> Complaints
+      </a>
+      <a href="/admin/users" class="<%= locals.activePage === 'users' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-users"></i></span> Users
+      </a>
+    </nav>
+  </div>
+  <% } else { %>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Main</div>
+    <nav class="sidebar-nav">
+      <a href="/dashboard" class="<%= locals.activePage === 'dashboard' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-home"></i></span> Dashboard
+      </a>
+      <a href="/resident/rooms" class="<%= locals.activePage === 'rooms' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-door-open"></i></span> Available Rooms
+      </a>
+      <a href="/resident/bookings" class="<%= locals.activePage === 'bookings' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-calendar-check"></i></span> My Bookings
+      </a>
+      <a href="/resident/complaints" class="<%= locals.activePage === 'complaints' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-exclamation-circle"></i></span> My Complaints
+      </a>
+    </nav>
+  </div>
+  <% } %>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Account</div>
+    <nav class="sidebar-nav">
+      <a href="/profile" class="<%= locals.activePage === 'profile' ? 'active' : '' %>">
+        <span class="nav-icon"><i class="fas fa-user-cog"></i></span> Profile
+      </a>
+      <a href="/auth/logout">
+        <span class="nav-icon"><i class="fas fa-sign-out-alt"></i></span> Logout
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-footer">
+    <% if (user) { %>
+    <div class="sidebar-user">
+      <div class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
+      <div class="user-info">
+        <div class="user-name"><%= user.name %></div>
+        <div class="user-role"><%= user.role %></div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</aside>

@@ -1,0 +1,57 @@
+<% locals.activePage = 'users' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div><h1>User Management</h1><p>View and manage registered residents</p></div>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <% if (users.length === 0) { %>
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-users"></i></div>
+            <h6>No residents registered yet</h6>
+          </div>
+          <% } else { %>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <% users.forEach((u, i) => { %>
+              <tr>
+                <td class="text-muted"><%= i+1 %></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.85rem;flex-shrink:0;">
+                      <%= u.name.charAt(0).toUpperCase() %>
+                    </div>
+                    <span class="fw-semibold"><%= u.name %></span>
+                  </div>
+                </td>
+                <td><%= u.email %></td>
+                <td class="text-muted"><%= u.phone || '—' %></td>
+                <td><span class="badge badge-<%= u.role %>"><%= u.role %></span></td>
+                <td class="text-muted"><%= new Date(u.createdAt).toLocaleDateString('en-IN') %></td>
+                <td>
+                  <form action="/admin/users/<%= u._id %>/delete" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger" data-confirm="Delete user <%= u.name %>? This cannot be undone.">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

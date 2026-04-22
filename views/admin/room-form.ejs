@@ -1,0 +1,79 @@
+<% locals.activePage = 'rooms' %>
+<%- include('../partials/head') %>
+<div class="app-container">
+  <%- include('../partials/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/topbar') %>
+    <div class="page-content">
+      <%- include('../partials/flash') %>
+      <div class="page-header">
+        <div>
+          <h1><%= room ? 'Edit Room' : 'Add New Room' %></h1>
+          <p><%= room ? 'Update room details' : 'Fill in the details for the new room' %></p>
+        </div>
+        <a href="/admin/rooms" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+      </div>
+      <div class="card" style="max-width:700px;">
+        <div class="card-body">
+          <form action="/admin/rooms/<%= room ? room._id + '/edit' : 'add' %>" method="POST">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+              <div>
+                <label class="form-label">Room Number <span style="color:var(--danger)">*</span></label>
+                <input type="text" name="roomNumber" class="form-control" value="<%= room ? room.roomNumber : '' %>" placeholder="e.g. 101" required />
+              </div>
+              <div>
+                <label class="form-label">Floor <span style="color:var(--danger)">*</span></label>
+                <input type="number" name="floor" class="form-control" value="<%= room ? room.floor : '' %>" placeholder="e.g. 1" min="0" required />
+              </div>
+              <div>
+                <label class="form-label">Room Type <span style="color:var(--danger)">*</span></label>
+                <select name="type" class="form-select" required>
+                  <option value="">Select type</option>
+                  <% ['Single','Double','Triple','Dormitory'].forEach(t => { %>
+                  <option value="<%= t %>" <%= room && room.type === t ? 'selected' : '' %>><%= t %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Capacity <span style="color:var(--danger)">*</span></label>
+                <input type="number" name="capacity" class="form-control" value="<%= room ? room.capacity : '' %>" placeholder="Max occupants" min="1" required />
+              </div>
+              <div>
+                <label class="form-label">Monthly Price (₹) <span style="color:var(--danger)">*</span></label>
+                <input type="number" name="price" class="form-control" value="<%= room ? room.price : '' %>" placeholder="e.g. 5000" min="0" required />
+              </div>
+              <div>
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                  <% ['Available','Occupied','Maintenance'].forEach(s => { %>
+                  <option value="<%= s %>" <%= room && room.status === s ? 'selected' : '' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+            <div style="margin-bottom:16px;">
+              <label class="form-label">Amenities</label>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px;background:var(--body-bg);border-radius:8px;">
+                <% ['AC','WiFi','Attached Bathroom','Hot Water','TV','Refrigerator','Study Table','Wardrobe','Balcony','Laundry'].forEach(a => { %>
+                <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:500;cursor:pointer;">
+                  <input type="checkbox" name="amenities" value="<%= a %>" <%= room && room.amenities.includes(a) ? 'checked' : '' %> />
+                  <%= a %>
+                </label>
+                <% }) %>
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="3" placeholder="Optional room description..."><%= room ? room.description : '' %></textarea>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> <%= room ? 'Update Room' : 'Add Room' %></button>
+              <a href="/admin/rooms" class="btn btn-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,93 @@
+<% locals.activePage = 'profile' %>
+<%- include('./partials/head') %>
+<div class="app-container">
+  <%- include('./partials/sidebar') %>
+  <div class="main-content">
+    <%- include('./partials/topbar') %>
+    <div class="page-content">
+      <%- include('./partials/flash') %>
+      <div class="page-header">
+        <div><h1>My Profile</h1><p>View and update your account information</p></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;flex-wrap:wrap;">
+
+        <!-- Profile Card -->
+        <div class="card" style="text-align:center;">
+          <div class="card-body" style="padding:28px 20px;">
+            <div class="profile-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
+            <div style="font-size:1.15rem;font-weight:700;color:var(--primary);"><%= user.name %></div>
+            <div style="margin:4px 0 8px;"><span class="badge badge-<%= user.role %>"><%= user.role %></span></div>
+            <div class="text-muted" style="font-size:.82rem;"><%= user.email %></div>
+            <hr class="section-divider" />
+            <div class="info-row"><span class="info-label"><i class="fas fa-phone"></i> Phone</span><span class="info-value"><%= user.phone || '—' %></span></div>
+            <div class="info-row" style="border:none;"><span class="info-label"><i class="fas fa-map-marker-alt"></i> Address</span><span class="info-value"><%= user.address || '—' %></span></div>
+            <hr class="section-divider" />
+            <div class="text-muted" style="font-size:.78rem;">Member since <%= new Date(user.createdAt).toLocaleDateString('en-IN', {year:'numeric',month:'long'}) %></div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+
+          <!-- Edit Profile -->
+          <div class="card">
+            <div class="card-header"><h5><i class="fas fa-user-edit" style="color:var(--primary-light);margin-right:8px;"></i>Edit Profile</h5></div>
+            <div class="card-body">
+              <form action="/profile/update" method="POST">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                  <div>
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-control" value="<%= user.name %>" required />
+                  </div>
+                  <div>
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" name="phone" class="form-control" value="<%= user.phone || '' %>" placeholder="+91 98765 43210" />
+                  </div>
+                </div>
+                <div style="margin-bottom:16px;">
+                  <label class="form-label">Address</label>
+                  <textarea name="address" class="form-control" rows="2" placeholder="Your home address"><%= user.address || '' %></textarea>
+                </div>
+                <div style="margin-bottom:8px;">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-control" value="<%= user.email %>" disabled style="background:#f7f9fc;cursor:not-allowed;" />
+                  <small class="text-muted">Email cannot be changed.</small>
+                </div>
+                <div style="margin-top:16px;">
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Change Password -->
+          <div class="card">
+            <div class="card-header"><h5><i class="fas fa-lock" style="color:var(--danger);margin-right:8px;"></i>Change Password</h5></div>
+            <div class="card-body">
+              <form action="/profile/change-password" method="POST">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+                  <div>
+                    <label class="form-label">Current Password</label>
+                    <input type="password" name="oldPassword" class="form-control" placeholder="Current password" required autocomplete="current-password" />
+                  </div>
+                  <div>
+                    <label class="form-label">New Password</label>
+                    <input type="password" name="newPassword" class="form-control" placeholder="Min. 6 chars" required autocomplete="new-password" />
+                  </div>
+                  <div>
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" name="confirmNewPassword" class="form-control" placeholder="Repeat new password" required autocomplete="new-password" />
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-danger"><i class="fas fa-key"></i> Update Password</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('./partials/footer') %>
